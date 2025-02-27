@@ -11,6 +11,7 @@
 
 %% API
 -export([
+  start/0,    %% 添加数据库连接池
   get_all/1,  %% 获取所有数据
   get_row/1,  %% 获取一行数据
   get_one/1,  %% 获取一个数据
@@ -18,7 +19,15 @@
 ]).
 
 -include("emysql.hrl").
--define(POOL_ID, hello_pool).
+-define(POOL_ID, fs_pool).
+
+start() ->
+  case application:get_env(emysql, connect) of
+    undefined ->
+      skip;
+    {ok, ConnectInfo} ->
+      emysql:add_pool(?POOL_ID, ConnectInfo)
+  end.
 
 get_all(Sql) ->
   case emysql:execute(?POOL_ID, Sql) of
