@@ -21,6 +21,7 @@
 -include("emysql.hrl").
 -define(POOL_ID, fs_pool).
 
+%% 添加数据库连接池
 start() ->
   case application:get_env(emysql, connect) of
     undefined ->
